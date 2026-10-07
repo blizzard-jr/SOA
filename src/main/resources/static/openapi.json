@@ -1,0 +1,1420 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "StudyGroup и ISU API",
+    "version": "1.0.0",
+    "description": "Лабораторная работа №1 по сервис-ориентированной архитектуре. Коллекция хранится в файловой базе H2. ID генерируется базой данных, а дата создания задаётся сервером. Два набора операций доступны на /groups и /isu."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Текущий сервер"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ISU",
+      "description": "Дополнительные операции, вызывающие HTTP API сервиса групп"
+    },
+    {
+      "name": "Study groups",
+      "description": "Управление коллекцией учебных групп"
+    }
+  ],
+  "paths": {
+    "/groups/{id}": {
+      "get": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Получить группу по ID",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyGroup"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/groups/999"
+                }
+              }
+            }
+          }
+        },
+        "description": "Возвращает одну учебную группу по положительному ID из URL."
+      },
+      "put": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Обновить группу",
+        "description": "Полная замена изменяемых полей; ID и дата создания сохраняются.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyGroup"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Content-Type тела запроса не поддерживается; требуется application/json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 415,
+                  "error": "Unsupported Media Type",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/groups/999"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Удалить группу",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/groups/999"
+                }
+              }
+            }
+          }
+        },
+        "description": "Удаляет группу по ID; при успехе возвращает 204 без тела."
+      },
+      "patch": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Частично обновить число студентов",
+        "description": "Изменяет только studentsCount; остальные поля группы сохраняются.",
+        "operationId": "patchStudentsCount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentsCountPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyGroup"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Content-Type тела запроса не поддерживается; требуется application/json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 415,
+                  "error": "Unsupported Media Type",
+                  "path": "/groups/0"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/groups/999"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/isu/group/{group-id}/add-student": {
+      "post": {
+        "tags": [
+          "ISU"
+        ],
+        "summary": "Добавить студента в группу",
+        "description": "Вызывает GET и PUT первого сервиса; увеличивает studentsCount на единицу.",
+        "operationId": "addStudent",
+        "parameters": [
+          {
+            "name": "group-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyGroup"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/isu/group/0/add-student"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Переполнение studentsCount",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/isu/group/0/add-student"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/isu/group/0/add-student"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Content-Type тела запроса не поддерживается; требуется application/json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 415,
+                  "error": "Unsupported Media Type",
+                  "path": "/isu/group/0/add-student"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/isu/group/999/add-student"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Ошибка вызова сервиса групп",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 502,
+                  "error": "Bad Gateway",
+                  "path": "/isu/group/0/add-student"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups": {
+      "get": {
+        "tags": [
+          "Study groups"
+        ],
+        "operationId": "list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/groups"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Номер страницы с нуля.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Размер страницы.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Повторяемый параметр или список через запятую. Поля из списка ниже, префикс '-' означает порядок убывания.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "name",
+              "-studentsCount"
+            ]
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Равенство по любой комбинации полей. Синтаксис: filter[name]=P3110&filter[coordinates.x]=1.5. Также принимается filter.name=P3110. Для отсутствующего значения передайте null. Допустимые поля: id, name, coordinates.x, coordinates.y, creationDate, studentsCount, expelledStudents, shouldBeExpelled, formOfEducation, groupAdmin.name, groupAdmin.weight, groupAdmin.eyeColor, groupAdmin.hairColor, groupAdmin.nationality, groupAdmin.location.x, groupAdmin.location.y, groupAdmin.location.z, groupAdmin.location.name",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "name": "P3110"
+            }
+          }
+        ],
+        "description": "Получить страницу групп с фильтрацией по любому набору полей и многоуровневой сортировкой. Поля вложенных объектов разделяются точкой. Для null используется буквальное значение null."
+      },
+      "post": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Создать группу",
+        "description": "ID и дата создания назначаются сервером. Передайте остальные поля в JSON.",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyGroup"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры или JSON-тело",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 400,
+                  "error": "Bad Request",
+                  "path": "/groups"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Content-Type тела запроса не поддерживается; требуется application/json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 415,
+                  "error": "Unsupported Media Type",
+                  "path": "/groups"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/isu/statistics/count-expelled": {
+      "get": {
+        "tags": [
+          "ISU"
+        ],
+        "summary": "Общее число отчисленных студентов",
+        "description": "Суммирует expelledStudents всех групп, запрашивая страницы первого сервиса.",
+        "operationId": "countExpelled",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TotalExpelled"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/isu/statistics/count-expelled"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Переполнение суммы",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/isu/statistics/count-expelled"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Ошибка вызова сервиса групп",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 502,
+                  "error": "Bad Gateway",
+                  "path": "/isu/statistics/count-expelled"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups/statistics/count-by-creation-date": {
+      "get": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Количество групп по датам создания",
+        "operationId": "countByDate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DateCount"
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/statistics/count-by-creation-date"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/statistics/count-by-creation-date"
+                }
+              }
+            }
+          }
+        },
+        "description": "Группирует все учебные группы по дате создания и возвращает дату и количество для каждой группы."
+      }
+    },
+    "/groups/statistics/average-expelled": {
+      "get": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Среднее число отчисленных студентов",
+        "description": "Для пустой коллекции возвращает 404.",
+        "operationId": "averageExpelled",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Average"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/statistics/average-expelled"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/statistics/average-expelled"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/groups/statistics/average-expelled"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups/min-id": {
+      "get": {
+        "tags": [
+          "Study groups"
+        ],
+        "summary": "Группа с минимальным ID",
+        "description": "Для пустой коллекции возвращает 404.",
+        "operationId": "minId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyGroup"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "HTTP-метод не поддерживается для этого адреса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 405,
+                  "error": "Method Not Allowed",
+                  "path": "/groups/min-id"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Сервис не может сформировать ответ в формате из заголовка Accept"
+          },
+          "422": {
+            "description": "Запрос корректен синтаксически, но не может быть обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 422,
+                  "error": "Unprocessable Entity",
+                  "path": "/groups/min-id"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Группа или данные не найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "timestamp": "2026-09-25T09:07:12.065+00:00",
+                  "status": 404,
+                  "error": "Not Found",
+                  "path": "/groups/min-id"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Coordinates": {
+        "required": [
+          "x",
+          "y"
+        ],
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "float"
+          },
+          "y": {
+            "type": "number",
+            "format": "float",
+            "nullable": false
+          }
+        }
+      },
+      "Input": {
+        "required": [
+          "coordinates",
+          "expelledStudents",
+          "formOfEducation",
+          "name",
+          "studentsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Непустая строка, не только пробелы"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Coordinates"
+          },
+          "studentsCount": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "expelledStudents": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "shouldBeExpelled": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "nullable": true
+          },
+          "formOfEducation": {
+            "type": "string",
+            "enum": [
+              "DISTANCE_EDUCATION",
+              "FULL_TIME_EDUCATION",
+              "EVENING_CLASSES"
+            ]
+          },
+          "groupAdmin": {
+            "$ref": "#/components/schemas/Person",
+            "nullable": true
+          }
+        },
+        "description": "Изменяемые данные группы для POST и PUT."
+      },
+      "Location": {
+        "required": [
+          "name",
+          "x",
+          "y",
+          "z"
+        ],
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "z": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "maxLength": 792,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "Person": {
+        "required": [
+          "location",
+          "name",
+          "weight"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Непустая строка, не только пробелы"
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "eyeColor": {
+            "type": "string",
+            "enum": [
+              "GREEN",
+              "RED",
+              "BROWN"
+            ],
+            "nullable": true
+          },
+          "hairColor": {
+            "type": "string",
+            "enum": [
+              "GREEN",
+              "RED",
+              "ORANGE",
+              "BROWN"
+            ],
+            "nullable": true
+          },
+          "nationality": {
+            "type": "string",
+            "enum": [
+              "UNITED_KINGDOM",
+              "INDIA",
+              "VATICAN",
+              "SOUTH_KOREA"
+            ],
+            "nullable": true
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        }
+      },
+      "StudyGroup": {
+        "required": [
+          "coordinates",
+          "creationDate",
+          "expelledStudents",
+          "formOfEducation",
+          "id",
+          "name",
+          "studentsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Непустая строка, не только пробелы"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Coordinates"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date",
+            "readOnly": true
+          },
+          "studentsCount": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "expelledStudents": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "shouldBeExpelled": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "nullable": true
+          },
+          "formOfEducation": {
+            "type": "string",
+            "enum": [
+              "DISTANCE_EDUCATION",
+              "FULL_TIME_EDUCATION",
+              "EVENING_CLASSES"
+            ]
+          },
+          "groupAdmin": {
+            "$ref": "#/components/schemas/Person",
+            "nullable": true
+          }
+        },
+        "description": "Учебная группа с автоматически назначенными ID и датой создания."
+      },
+      "StudentsCountPatch": {
+        "required": [
+          "studentsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "studentsCount": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "description": "Новое положительное количество студентов"
+          }
+        },
+        "description": "Частичное изменение только поля studentsCount."
+      },
+      "TotalExpelled": {
+        "type": "object",
+        "properties": {
+          "totalExpelled": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Page": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudyGroup"
+            }
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DateCount": {
+        "type": "object",
+        "properties": {
+          "creationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Average": {
+        "type": "object",
+        "properties": {
+          "average": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "description": "Единое JSON-тело ошибки, формируемое ApiExceptionHandler.",
+        "required": [
+          "timestamp",
+          "status",
+          "error",
+          "path"
+        ],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "error": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
